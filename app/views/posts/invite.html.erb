@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+<% if (@userToInvite.raw_invitation_token != nil) %>
+	Invite URL: <%= accept_user_invitation_url(:invitation_token => @userToInvite.raw_invitation_token) %><br />
+<% else %>
+  <%="#{@userToInvite.email} was invited to be your friend" %>
+<% end %>
+<table>
+  <thead>
+    <tr>
+      <th>Invitations</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @invitations.each do |invite| %>
+      <tr>
+        <td><%= invite.email %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table></br>
+
+<%= link_to 'Signout', destroy_user_session_path, method: :delete %>
+<!-- <a href="/accounts/sign_out" data-method="delete">Logout</a> -->
+<%= link_to 'Back', posts_path %>

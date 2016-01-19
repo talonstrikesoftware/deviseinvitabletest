@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Posts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Post text</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <td><%= post.post_text %></td>
+        <td><%= link_to 'Show', post %></td>
+        <td><%= link_to 'Edit', edit_post_path(post) %></td>
+        <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= form_tag("/invite_teammate", method:"post") do %>
+  <div class="field">
+    <%= label_tag(:email, "Teammate Email:") %><br>
+    <%= text_field_tag :email %>
+  </div>
+  <div class="actions">
+    <%= submit_tag("Get Invite URL") %>
+  </div>
+<% end %>
+
+Signup: <%= "http://localhost:3000/users/sign_up?mytoken=123456" %>
+
+<%= link_to 'New Post', new_post_path %>
+<%= link_to 'Signout', destroy_user_session_path, method: :delete %>
+<!-- <a href="/accounts/sign_out" data-method="delete">Logout</a> -->
