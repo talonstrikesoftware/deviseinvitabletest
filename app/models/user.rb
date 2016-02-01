@@ -11,6 +11,8 @@ class User < ActiveRecord::Base
   has_many :friend_relationships
   has_many :friends, through: :friend_relationships
 
+  has_many :posts
+
   def add_friend
 #    puts "local_variables: #{local_variables}"
 #    puts "instance_variables: #{instance_variables}"
@@ -27,6 +29,7 @@ class User < ActiveRecord::Base
       puts "friend is: #{friend}"
       if (friend != nil) 
         self.friend_relationships.create(:friend => friend)
+        friend.friend_relationships.create(:friend => self)
       end
     end
   end

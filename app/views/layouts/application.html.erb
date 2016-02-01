@@ -9,7 +9,10 @@
 <body>
 	<p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
-    <%= yield %>
+  <% if current_user %>
+    <h2>You are logged in as: <%= current_user.email %></h2>
+  <% end %>
+  <%= yield %>
 
 </body>
 </html>

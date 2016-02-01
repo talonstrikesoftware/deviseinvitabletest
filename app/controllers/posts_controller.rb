@@ -5,8 +5,17 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    puts "PostsController.index was called: #{params}, session is: #{session}"
-    @posts = Post.all
+    # retrieve all posts created by me
+    sql = "user_id = #{current_user.id}"
+
+    # retrieve all posts created by my friends
+    friend_ids = current_user.friends.ids
+    friend_ids_string = friend_ids.join(", ")
+    if (friend_ids_string.length > 0)
+      sql = sql + " or user_id in (#{friend_ids_string})"
+    end
+
+    @posts = Post.where("#{sql}").order(:created_at)
   end
 
   # GET /posts/1
@@ -27,6 +36,7 @@ class PostsController < ApplicationController
   # POST /posts.json
   def create
     @post = Post.new(post_params)
+    current_user.posts << @post
 
     respond_to do |format|
       if @post.save
@@ -67,6 +77,7 @@ class PostsController < ApplicationController
     @userToInvite = User.find_by(:email => params['email'])
     @invitations = current_user.invitations
     if (@userToInvite != nil)
+      current_user.friend_relationships.create(:friend => @userToInvite)
       @userToInvite.friend_relationships.create(:friend => current_user)
     else
       @userToInvite = User.invite!({:email => params['email'], :skip_invitation => true}, current_user)

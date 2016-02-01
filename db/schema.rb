@@ -11,10 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160114201438) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 20160131193356) do
 
   create_table "friend_relationships", force: :cascade do |t|
     t.integer  "user_id"
@@ -23,15 +20,18 @@ ActiveRecord::Schema.define(version: 20160114201438) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "friend_relationships", ["friend_id"], name: "index_friend_relationships_on_friend_id", using: :btree
-  add_index "friend_relationships", ["user_id", "friend_id"], name: "index_friend_relationships_on_user_id_and_friend_id", unique: true, using: :btree
-  add_index "friend_relationships", ["user_id"], name: "index_friend_relationships_on_user_id", using: :btree
+  add_index "friend_relationships", ["friend_id"], name: "index_friend_relationships_on_friend_id"
+  add_index "friend_relationships", ["user_id", "friend_id"], name: "index_friend_relationships_on_user_id_and_friend_id", unique: true
+  add_index "friend_relationships", ["user_id"], name: "index_friend_relationships_on_user_id"
 
   create_table "posts", force: :cascade do |t|
     t.string   "post_text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "user_id"
   end
+
+  add_index "posts", ["user_id"], name: "index_posts_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -42,8 +42,8 @@ ActiveRecord::Schema.define(version: 20160114201438) do
     t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.inet     "current_sign_in_ip"
-    t.inet     "last_sign_in_ip"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "invitation_token"
@@ -56,10 +56,10 @@ ActiveRecord::Schema.define(version: 20160114201438) do
     t.integer  "invitations_count",      default: 0
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
-  add_index "users", ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
-  add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true
+  add_index "users", ["invitations_count"], name: "index_users_on_invitations_count"
+  add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id"
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
 end
